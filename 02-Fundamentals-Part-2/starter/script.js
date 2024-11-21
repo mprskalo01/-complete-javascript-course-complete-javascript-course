@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 // strict mode makes avoding bugs easier
 // let hasDriversLicense = false;
 // const passTest = true;
@@ -408,7 +408,7 @@
 
 // CHALLENGE #4
 
-const bills = [22, 295, 176, 440, 37, 105, 10, 1100, 86, 52, "okay"];
+const bills = [22, 295, 176, 440, 37, 105, 10, 1100, 86, 52, 'okay'];
 const tips = [];
 const totals = [];
 
