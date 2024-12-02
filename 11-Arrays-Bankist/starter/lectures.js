@@ -1,11 +1,30 @@
 'use strict';
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 // LECTURES
 
+// FIND METHOD
+
+
+
+/*
+// CHAINING METHODS - chaining methods to methods that returns an array
+const eurToUsd = 1.1;
+
+// PIPELINE
+const totalDepositsUSD = movements
+  .filter(mov => mov > 0)
+  // .map((mov, i, arr) => {
+  //   console.log(arr); // good for debugging new arrays in chain
+  //   return mov * eurToUsd;
+  // })
+  .map(mov => mov * eurToUsd)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(totalDepositsUSD);
+/*
 // map, filter, reduce - data transformation methods
 // map method same as for each, only it puts mutated values into an array
-
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+/*
 const eurToUsd = 1.1;
 
 // const movementsUSD = movements.map(function (mov) {
@@ -18,22 +37,54 @@ const movementsUSD = movements.map(
 
 console.log(movementsUSD);
 
-const movementsDescriptions = movements.map((mov, i, arr) => {
-  if (mov > 0) {
-    return `Movement ${i + 1}: You ${
-      mov > 0 ? 'deposited' : 'withdrew'
-    } ${mov}`;
-  }
+const movementsDescriptions = movements.map((mov, i) => {
+  return `Movement ${i + 1}: You ${
+    mov > 0 ? 'deposited' : 'withdrew'
+  } ${Math.abs(mov)}`;
 });
 console.log(movementsDescriptions);
+*/
 
 // filter methods, returns new array for which the condition is true (current > 2)
+/*
 
+const deposits = movements.filter(function (mov) {
+  // params have acces to (mov, i, arr)
+  return mov > 0; // returns elements which are greater than 0 to deposits
+});
+console.log(deposits);
+
+const withdrawals = movements.filter(mov => mov < 0);
+console.log(withdrawals);
+*/
 // reduce methods, reduces all the array elements into one single value
+/*
+// acc is the accumulator which accumulates the values of the array -> SNOWBALL
+// const balance = movements.reduce(function (acc, cur, i, arr) {
+//   console.log(`Iteration ${i}: ${acc}`);
 
+//   return acc + cur;
+// }, 0); // 0(zero) is the starting value of the accumulator
+const balance = movements.reduce((acc, cur) => acc + cur, 0);
+console.log(balance);
+
+// get maximum value using reduce
+// const maxMovement = movements.reduce((acc, mov) => {
+//   if (acc > mov) {
+//     return acc;
+//   } else {
+//     return mov;
+//   }
+// }, movements[0]);
+// simplified max value
+const maxMovement = movements.reduce(
+  (acc, mov) => (acc > mov ? acc : mov),
+  movements[0]
+);
+console.log(maxMovement);
+*/
 // FOR EACH METHOD - Loop through an array using a function for each element
 /*
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 // movements.forEach(movement => console.log(movement));
 // the first is the element, second is the index of the element, third is the whole array
 // in the real world use the shorter abbreviations for params (mov, i , arr)
