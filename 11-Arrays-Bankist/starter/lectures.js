@@ -1,12 +1,143 @@
 'use strict';
+// const accounts = [account1, account2, account3, account4];
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
+// accounts
 // LECTURES
 
-// FIND METHOD
+// More ways of creating and filling arrays
+/*
+const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+console.log(new Array(1, 2, 3, 4, 5, 6, 7, 8, 9));
+const x = new Array(9); // creates an array with 7 empty elements
+console.log(x);
 
+// fill method - fills the array with the value
+// fill (value, beginning index, end index)
+x.fill(1, 3, 5);
+x.fill(1);
+console.log(x);
 
+nums.fill(4, 4, 6);
+console.log(nums);
 
+// Array.from function
+const genArray = Array.from({ length: 9 }, () => 1);
+console.log(genArray);
+
+const z = Array.from({ length: 9 }, (_, i) => i + 1);
+console.log(z);
+
+// making dom objects to array
+
+labelBalance.addEventListener('click', () => {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'),
+    el => Number(el.textContent.replace('€', ''))
+  );
+  console.log(movementsUI);
+});
+*/
+// SORTING ARRAYS - sort MUTATES THE ORIGINAL ARRAY
+/*
+// sorting works by converting to strings and then sorting
+// String sorting
+const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owners.sort());
+console.log(owners);
+// Numbers sorting
+// console.log(movements);
+// movements.sort(); // sorts alphabetically
+console.log(movements);
+
+// return < 0 ; A, B (keep order)
+// return > 0 ; B, A (switch order)
+//ASCENDING ORDER
+// movements.sort((a, b) => {
+//   if (a > b) {
+//     return 1;
+//   }
+//   if (b > a) {
+//     return -1;
+//   }
+// });
+movements.sort((a, b) => a - b); // BEST WAY FOR DESCENDING
+console.log(movements);
+// DESCENDING ORDER
+// movements.sort((a, b) => {
+//   if (a > b) {
+//     return -1;
+//   }
+//   if (b > a) {
+//     return 1;
+//   }
+// });
+movements.sort((a, b) => b - a); // BEST WAY FOR DESCENDING
+console.log(movements);
+*/
+// flat and flatMap methods
+/*
+// flat - method that 'flattens' nested arrays into a single array
+const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arr.flat());
+
+const arrDeep = [[[1, 2], 3], [4, [5, 6]], 7, 8];
+// flat method has a depth condition that we can change
+console.log(arrDeep.flat(2)); // depth of 2
+
+const accountMovements = accounts.map(acc => acc.movements);
+const allMovements = accountMovements.flat();
+
+// const overallBalance = allMovements.reduce((acc, mov) => acc + mov);
+
+// flat
+const overallBalance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov);
+console.log(overallBalance);
+
+// flatMap is a method which combines flat and map methods for better performance because it is a common combination
+// flatMap - IT ONLY GOES 1 LEVEL DEEP FOR NESTED ARRAYS
+const overallBalance2 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, mov) => acc + mov);
+console.log(overallBalance2);
+*/
+// some and every methods
+/*
+// SOME - returns true if there is at least one element which satisfies the condition
+console.log(movements.includes(-130)); // returns true if includes
+console.log(movements.some(mov => mov === -130));
+
+const anyDeposits = movements.some(mov => mov > 0); // returns true if there are any mov that satisfy condition
+const anyLargeDeposits = movements.some(mov => mov > 5000); // returns true if there are any mov that satisfy condition
+console.log(anyDeposits);
+console.log(anyLargeDeposits);
+
+// EVERY - - returns true if all elements satisfy the condition
+
+console.log(account4.movements.every(mov => mov > 0));
+
+// Seperate callback
+console.log(`-------SEPERATE CALLBACK-------`);
+const deposit = mov => mov > 0;
+console.log(movements.some(deposit));
+console.log(movements.every(deposit));
+console.log(movements.filter(deposit));
+*/
+
+// findIndex method -- returns the index of the first found element
+
+// FIND METHOD -- returns the first element that satisfies this condition
+/*
+const firstWithdrawal = movements.find(mov => mov < 0);
+console.log(firstWithdrawal);
+console.log(movements.find(mov => mov === 450));
+console.log(accounts);
+
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+console.log(account);
+*/
 /*
 // CHAINING METHODS - chaining methods to methods that returns an array
 const eurToUsd = 1.1;
