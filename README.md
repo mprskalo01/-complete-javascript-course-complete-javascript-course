@@ -43,9 +43,5 @@ The repository includes practical implementations demonstrating:
 - Development tools: Parcel, Babel
 - Version control with Git
 
-## Connect
-- Portfolio: [marioprskalo.dev](https://www.marioprskalo.dev/)
-- LinkedIn: [mprskalo01](https://linkedin.com/in/mprskalo01/)
-
 ## Course Reference
 This learning journey is based on [The Complete JavaScript Course 2024](https://www.udemy.com/course/the-complete-javascript-course/) by Jonas Schmedtmann.
