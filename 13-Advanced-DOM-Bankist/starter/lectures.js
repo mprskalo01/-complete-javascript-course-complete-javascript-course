@@ -86,3 +86,53 @@ console.log(link.getAttribute('href')); // #
 // logo.classList.contains();
 
 // Dont use logo.className = 'mario' // overwrites all of classes
+
+// Types of events and Event Handlers
+/*
+const h1 = document.querySelector('h1');
+const alertH1 = function (e) {
+  alert('addEventListener: Hovering heading');
+
+  // h1.removeEventListener('mouseenter', alertH1); // Removing event listeners
+};
+
+h1.addEventListener('mouseenter', alertH1);
+
+setTimeout(() => h1.removeEventListener('mouseenter', alertH1), 3000); // Removing event listeners after 3 seconds
+
+// inline html element attribut eg. onlick="alert('HTML inline alert')"
+
+// h1.onmouseenter = function (e) { // old way
+//   alert('onmouseenter: Hovering heading');
+// };
+*/
+// !Event Propagation: Bubbling and Capturing - Propagation
+/*
+// rgb (255,255,255)
+const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+
+const randomColor = () =>
+  `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
+
+document.querySelector('.nav__link').addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log(`LINK ${(e.target, e.currentTarget)}`);
+  console.log(e.currentTarget === this); // true
+
+  // Stop propagation - the event doesnt trigger parent element events
+  // e.stopPropagation() // in general, not a good idea
+});
+
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log(`LINKS ${(e.target, e.currentTarget)}`);
+});
+
+document.querySelector('.nav').addEventListener('click', function (e) {
+  this.style.backgroundColor = randomColor();
+  console.log(`NAVBAR ${(e.target, e.currentTarget)}`);
+});
+*/
+
+// Event Delegation

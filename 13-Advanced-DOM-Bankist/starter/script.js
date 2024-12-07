@@ -31,7 +31,6 @@ document.addEventListener('keydown', function (e) {
 });
 
 // Smooth scrolling
-
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
 
@@ -43,7 +42,7 @@ btnScrollTo.addEventListener('click', e => {
   // console.log(
   //   `Current scroll (X/Y): ${window.pageXOffset}/${window.pageYOffset}` // deprecated
   // );
-  console.log(`Current scroll (X/Y): ${window.scrollX}/${window.scrollY}`);
+  // console.log(`Current scroll (X/Y): ${window.scrollX}/${window.scrollY}`);
 
   // scrolling
   // window.scrollTo(
@@ -56,57 +55,35 @@ btnScrollTo.addEventListener('click', e => {
   //   top: s1coords.top + window.scrollY,
   //   behavior: 'smooth',
   // });
-
+  // console.log(
+  //   `height/width viewport: ${document.documentElement.clientHeight}/${document.documentElement.clientWidth}`
+  // );
   section1.scrollIntoView({ behavior: 'smooth' });
 });
 
-// console.log(
-//   `height/width viewport: ${document.documentElement.clientHeight}/${document.documentElement.clientWidth}`
-// );
+// Page Navigation
 
-////////////////////////////
-// Page navigation
-
+// Without event delegation
+/*
 // document.querySelectorAll('.nav__link').forEach(function (el) {
 //   el.addEventListener('click', function (e) {
-//     e.preventDefault();
+//     e.preventDefault(); // cancels the navigation to the anchor, now we will implement scrolling
 //     const id = this.getAttribute('href');
-//     console.log(id);
 //     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
 //   });
 // });
+*/
+// Using event delegation
 
-// 1. Add event listener to common parent element
-// 2. Determine what element originated the event
-
+// 1. Add event Listener to common parent element
+// 2. Determine which element originated the event
 document.querySelector('.nav__links').addEventListener('click', function (e) {
-  e.preventDefault();
-
+  // console.log(e.target);
+  e.preventDefault(); // cancels the navigation to the anchor, now we will implement scrolling
   // Matching strategy
   if (e.target.classList.contains('nav__link')) {
+    // console.log(`LINK`);
     const id = e.target.getAttribute('href');
     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
   }
-});
-
-///////////////////////////////////////
-// Tabbed component
-
-tabsContainer.addEventListener('click', function (e) {
-  const clicked = e.target.closest('.operations__tab');
-
-  // Guard clause
-  if (!clicked) return;
-
-  // Remove active classes
-  tabs.forEach(t => t.classList.remove('operations__tab--active'));
-  tabsContent.forEach(c => c.classList.remove('operations__content--active'));
-
-  // Activate tab
-  clicked.classList.add('operations__tab--active');
-
-  // Activate content area
-  document
-    .querySelector(`.operations__content--${clicked.dataset.tab}`)
-    .classList.add('operations__content--active');
 });
