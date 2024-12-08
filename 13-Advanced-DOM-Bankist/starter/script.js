@@ -87,3 +87,34 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
   }
 });
+
+// Tabbed component
+
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+// tabs.forEach(tab => tab.addEventListener('click', () => console.log(`LOG`)));
+tabsContainer.addEventListener('click', e => {
+  e.preventDefault();
+  const clicked = e.target.closest('.operations__tab');
+  // console.log(clicked);
+
+  // Guard clause
+  if (!clicked) return;
+
+  // Removing the active classes from tab and tab content
+  tabs.forEach(tab => tab.classList.remove('operations__tab--active'));
+  [...tabsContent].forEach(c =>
+    c.classList.remove('operations__content--active')
+  );
+
+  // Activete tab
+
+  clicked.classList.add('operations__tab--active');
+
+  // adding the active class to clicked tabs content
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
+});
