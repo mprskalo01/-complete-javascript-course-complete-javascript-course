@@ -169,3 +169,31 @@ console.log(h1.parentElement.children); // trick for all siblings
 });
 */
 
+// Passing arguments to event handlers
+
+// The Intersection Observer API
+/*
+// Define the callback function for the IntersectionObserver
+// This function will be called whenever the observed elements intersect with the root
+const obsCallback = function (entries, observer) {
+  // Loop through each entry (intersection event)
+  entries.forEach(entry => {
+    // Log the entry to the console
+    console.log(entry);
+  });
+};
+
+// Define the options for the IntersectionObserver
+const obsOptions = {
+  // The root element to use for intersection checking (null means the viewport)
+  root: null,
+  // The thresholds at which the callback should be invoked (0 and 20% visibility)
+  threshold: [0, 0.2],
+};
+
+// Create a new IntersectionObserver with the callback and options
+const observer = new IntersectionObserver(obsCallback, obsOptions);
+
+// Start observing the target element (section1)
+observer.observe(section1);
+*/

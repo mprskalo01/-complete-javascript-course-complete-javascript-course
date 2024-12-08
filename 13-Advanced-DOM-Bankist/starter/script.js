@@ -8,6 +8,11 @@ const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContent = document.querySelectorAll('.operations__content');
+const nav = document.querySelector('.nav');
+
 const openModal = function (e) {
   e.preventDefault();
   modal.classList.remove('hidden');
@@ -90,10 +95,6 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 
 // Tabbed component
 
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContent = document.querySelectorAll('.operations__content');
-
 // tabs.forEach(tab => tab.addEventListener('click', () => console.log(`LOG`)));
 tabsContainer.addEventListener('click', e => {
   e.preventDefault();
@@ -118,3 +119,58 @@ tabsContainer.addEventListener('click', e => {
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
     .classList.add('operations__content--active');
 });
+
+// Menu fade animation -- Passing arguments to event handlers
+
+const handleHover = function (e) {
+  // console.log(this, e.currentTarget);
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link'); // closest parent with nav class and search siblings
+    const logo = link.closest('.nav').querySelector('img');
+
+    siblings.forEach(el => {
+      if (el !== link) el.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
+};
+
+// handleHover(e, 0.5) ofcourse does not work
+// nav.addEventListener('mouseover', function (e) {
+//   handleHover(e, 0.5);
+// });
+
+// Passing "argument" into handler using bind
+nav.addEventListener('mouseover', handleHover.bind(0.5));
+
+nav.addEventListener('mouseout', handleHover.bind(1));
+
+// Sticky navigation
+
+// OLD WAY - NOT RECOMMENDED
+// const initialCoords = section1.getBoundingClientRect();
+// console.log(initialCoords);
+// window.addEventListener('scroll', function (e) {
+//   if (this.window.scrollY > initialCoords.top) nav.classList.add('sticky');
+//   else nav.classList.remove('sticky');
+// });
+
+// Better way : The Intersection Observer API
+
+const header = document.querySelector('.header');
+
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  console.log(entry);
+
+  if (!entry.isIntersecting) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0, // when 0% of header is visible, we want the function to trigger
+});
+
+headerObserver.observe(header);
