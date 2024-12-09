@@ -159,10 +159,11 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 // Better way : The Intersection Observer API
 
 const header = document.querySelector('.header');
+const navHeight = nav.getBoundingClientRect().height;
 
 const stickyNav = function (entries) {
   const [entry] = entries;
-  console.log(entry);
+  // console.log(entry);
 
   if (!entry.isIntersecting) nav.classList.add('sticky');
   else nav.classList.remove('sticky');
@@ -171,6 +172,61 @@ const stickyNav = function (entries) {
 const headerObserver = new IntersectionObserver(stickyNav, {
   root: null,
   threshold: 0, // when 0% of header is visible, we want the function to trigger
+  rootMargin: `-${navHeight}px`, // adds a margin to threshold of the negative height of navbar
 });
 
 headerObserver.observe(header);
+
+// Reavealing sections on scroll
+
+const allSections = document.querySelectorAll('.section');
+
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+  // console.log(entry);
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target); // stops observing - good for performance
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+
+allSections.forEach(function (section) {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+});
+
+// Lazy loading images
+
+const imgTargets = document.querySelectorAll('img[data-src]'); // selecting images which have data src attribute
+
+const loadImg = function (entries, observer) {
+  const [entry] = entries;
+  console.log(entry);
+
+  if (!entry.isIntersecting) return;
+
+  // Replace src with data-src
+
+  entry.target.src = entry.target.dataset.src;
+  // entry.target.classList.remove('lazy-img'); does not work properly on slow speeds
+
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+
+  observer.unobserve(entry.target);
+};
+
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: `200px`,
+});
+
+imgTargets.forEach(img => imgObserver.observe(img));
+
+// Slider component
