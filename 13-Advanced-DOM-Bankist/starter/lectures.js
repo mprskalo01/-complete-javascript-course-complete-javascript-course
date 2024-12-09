@@ -197,3 +197,5 @@ const observer = new IntersectionObserver(obsCallback, obsOptions);
 // Start observing the target element (section1)
 observer.observe(section1);
 */
+
+// Lifecycle DOM Events
