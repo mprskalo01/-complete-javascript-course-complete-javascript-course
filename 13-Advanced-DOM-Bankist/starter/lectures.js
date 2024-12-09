@@ -199,3 +199,35 @@ observer.observe(section1);
 */
 
 // Lifecycle DOM Events
+
+document.addEventListener('DOMContentLoaded', function (e) {
+  console.log('HTML parsed and DOM tree built', e);
+});
+
+window.addEventListener('load', function (e) {
+  console.log('Page fully loaded', e);
+});
+
+// window.addEventListener('beforeunload', function (e) {
+//   e.preventDefault();
+//   console.log(e);
+//   // e.returnValue = ''; Deprecated
+// });
+
+// Efficient Script Loading: defer and async
+// defer is best
+/*
+ * The difference between `defer` and `async` in the script tag:
+ *
+ * 1. `defer`:
+ *    - Scripts with `defer` are executed in the order they appear in the document.
+ *    - The script is downloaded in parallel to parsing the page, but execution is deferred until the HTML parsing is finished.
+ *    - It ensures that the DOM is fully built before the script runs.
+ *    - Suitable for scripts that rely on the DOM being fully constructed.
+ *
+ * 2. `async`:
+ *    - Scripts with `async` are executed as soon as they are downloaded, without waiting for the HTML parsing to complete.
+ *    - The script is downloaded in parallel to parsing the page, but execution happens immediately after the script is downloaded.
+ *    - The order of execution is not guaranteed, which can lead to issues if scripts depend on each other.
+ *    - Suitable for independent scripts that do not rely on the DOM or other scripts.
+ */
