@@ -1,7 +1,7 @@
 'use strict';
 
 // Constructor Functions and the new Operator
-
+/*
 const Person = function (firstName, birthYear) {
   // Instance properties
   this.firstName = firstName;
@@ -14,7 +14,7 @@ const Person = function (firstName, birthYear) {
 };
 
 const mario = new Person('Mario', 2001);
-console.log(mario);
+// console.log(mario);
 
 // 1. New {} - empty object is created
 // 2. function is called, this = {} - this is set to the new empty object
@@ -23,6 +23,92 @@ console.log(mario);
 
 const matilda = new Person('Matilda', 2017);
 const jack = new Person('Jack', 1975);
-console.log(matilda, jack);
+// console.log(matilda, jack);
 
-console.log(mario instanceof Person); // true
+// console.log(mario instanceof Person); // true
+
+// Prototypes
+
+console.log(Person.prototype);
+
+Person.prototype.calcAge = function () {
+  console.log(2024 - this.birthYear);
+};
+
+mario.calcAge();
+
+console.log(mario.__proto__);
+console.log(mario.__proto__ === Person.prototype); // true
+console.log(Person.prototype.isPrototypeOf(mario)); // true
+
+Person.prototype.species = 'Homo Sapiens';
+
+console.log(mario.species, matilda.species);
+
+console.log(mario.hasOwnProperty('firstName')); // true
+console.log(mario.hasOwnProperty('species')); // false because it is in prototype
+
+// Prototypal Inheritance and The Prototype Chain
+
+// Prototypal Inheritance on Built-In Objects
+
+console.log(mario.__proto__);
+console.log(mario.__proto__.__proto__);
+console.log(mario.__proto__.__proto__.__proto__);
+
+console.dir(Person.prototype.constructor);
+
+const arr = [3, 5, 5, 7, 98, 4, 4, 3, 3, 2]; // new Array([3, 5, 7, 98, 4, 3, 2])
+console.log(arr.__proto__);
+console.log(arr.__proto__ === Array.prototype); // true
+console.log(arr.__proto__.__proto__);
+
+Array.prototype.unique = function () {
+  return [...new Set(this)];
+}; // not good
+
+console.log(arr.unique());
+
+const h1 = document.querySelector('h1');
+console.dir(h1);
+
+console.dir(x => x + 1);
+*/
+
+///////////////////////////////////////
+// #CHALLENGE #1
+
+/* 
+1. Use a constructor function to implement a Car. A car has a make and a speed property. The speed property is the current speed of the car in km/h;
+2. Implement an 'accelerate' method that will increase the car's speed by 10, and log the new speed to the console;
+3. Implement a 'brake' method that will decrease the car's speed by 5, and log the new speed to the console;
+4. Create 2 car objects and experiment with calling 'accelerate' and 'brake' multiple times on each of them.
+
+DATA CAR 1: 'BMW' going at 120 km/h
+DATA CAR 2: 'Mercedes' going at 95 km/h
+
+GOOD LUCK 😀
+*/
+/*
+const Car = function (make, speed) {
+  this.make = make;
+  this.speed = speed;
+};
+Car.prototype.accelerate = function () {
+  this.speed += 10;
+  console.log(`${this.make} is going at ${this.speed} km/h`);
+};
+Car.prototype.brake = function () {
+  this.speed -= 5;
+  console.log(`${this.make} is going at ${this.speed} km/h`);
+};
+
+const bmw = new Car('BMW', 120);
+const mercedes = new Car('Mercedes', 95);
+
+bmw.accelerate();
+bmw.brake();
+
+mercedes.accelerate();
+mercedes.brake();
+*/
