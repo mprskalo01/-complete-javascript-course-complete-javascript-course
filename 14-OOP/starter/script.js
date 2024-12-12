@@ -498,7 +498,7 @@ martha.calcAge();
 */
 
 // Inheritence Between "Classes": Object.create
-
+/*
 const PersonProto = {
   calcAge() {
     console.log(2024 - this.birthYear);
@@ -525,3 +525,191 @@ const jay = Object.create(StudentProto);
 jay.init('Jay', 2003, 'Computer Science');
 jay.introduce();
 jay.calcAge();
+*/
+
+// Bankist account Class example
+/*
+class Account {
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.pin = pin;
+    this.movements = [];
+    this.locale = navigator.language;
+    console.log(`Thanks for opening an account, ${owner}`);
+  }
+
+  // Public interface
+  deposit(value) {
+    this.movements.push(value);
+  }
+  withdraw(value) {
+    this.deposit(-value);
+  }
+  approveLoan(value) {
+    return true;
+  }
+  requestLoan(value) {
+    if (this.approveLoan(value)) {
+      this.deposit(value);
+      console.log(`Loan approved`);
+    }
+  }
+}
+
+const acc1 = new Account('Mario', 'EUR', 1111);
+
+acc1.deposit(250);
+acc1.withdraw(150);
+
+acc1.requestLoan(500);
+
+acc1.approveLoan(500); // this should not be available outside - should be encapsulated
+
+console.log(acc1.pin);
+console.log(acc1);
+*/
+
+// Encapsulation: Private Class Fields and Methods
+
+// 1) Public fields
+// 2) Private fields
+// 3) Public methods
+// 4) Private methods
+// STATIC version of these 4
+/*
+class Account {
+  // Public fields
+  locale = navigator.language;
+  bank = 'Bankist';
+  // Private fields
+  #movements = [];
+  #pin;
+
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+
+    // Private field inside of constructor -- first needs to be defined above
+    this.#pin = pin;
+
+    // this.movements = [];
+    // this.locale = navigator.language;
+
+    console.log(`Thanks for opening an account, ${owner}`);
+  }
+
+  // Public interface (API)
+
+  getMovements() {
+    // not chainable
+    return this.#movements;
+  }
+
+  deposit(value) {
+    this.#movements.push(value);
+    return this;
+  }
+  withdraw(value) {
+    this.deposit(-value);
+    return this;
+  }
+
+  // Private method
+  #approveLoan(value) {
+    // fake method
+    return true;
+  }
+
+  requestLoan(value) {
+    if (this.#approveLoan(value)) {
+      this.deposit(value);
+      console.log(`Loan approved`);
+    }
+    return this;
+  }
+}
+
+const acc1 = new Account('Mario', 'EUR', 1111);
+
+// acc1.deposit(500);
+// acc1.withdraw(100);
+
+// acc1.#movements = []; // not allowed - private
+// console.log(acc1.#movements); // not allowed - private
+console.log(acc1);
+
+// Chaining Methods -- need to return 'this' in methods
+acc1
+  .deposit(300)
+  .withdraw(100)
+  .withdraw(50)
+  .requestLoan(25000)
+  .withdraw(4000)
+  .getMovements(); // but can be at the end
+// console.log(acc1);
+*/
+
+///////////////////////////////////////
+// Coding Challenge #4
+
+/* 
+1. Re-create challenge #3, but this time using ES6 classes: create an 'EVCl' child class of the 'CarCl' class
+2. Make the 'charge' property private;
+3. Implement the ability to chain the 'accelerate' and 'chargeBattery' methods of this class, and also update the 'brake' method in the 'CarCl' class. They experiment with chining!
+
+DATA CAR 1: 'Rivian' going at 120 km/h, with a charge of 23%
+
+GOOD LUCK 😀
+*/
+
+class CarCl {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+  accelerate() {
+    this.speed += 10;
+    console.log(`${this.make} is going at ${this.speed} km/h`);
+    return this;
+  }
+  brake() {
+    this.speed -= 5;
+    console.log(`${this.make} is going at ${this.speed} km/h`);
+    return this;
+  }
+
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+  set speedUS(mph) {
+    this.speed = mph * 1.6;
+  }
+}
+
+class EVCl extends CarCl {
+  #charge;
+  constructor(make, speed, charge) {
+    super(make, speed);
+    this.#charge = charge;
+  }
+
+  accelerate = function () {
+    this.speed += 20;
+    this.#charge--;
+    console.log(
+      `${this.make} going at ${this.speed} km/h, with a charge of ${
+        this.#charge
+      }%`
+    );
+    return this;
+  };
+
+  chargeTo = function (chargeTo) {
+    this.charge = chargeTo;
+  };
+}
+
+const rivian = new EVCl('Rivian', 120, 23);
+
+rivian.accelerate().brake().accelerate().brake().brake();
