@@ -182,11 +182,13 @@ headerObserver.observe(header);
 const allSections = document.querySelectorAll('.section');
 
 const revealSection = function (entries, observer) {
-  const [entry] = entries;
-  // console.log(entry);
-  if (!entry.isIntersecting) return;
-  entry.target.classList.remove('section--hidden');
-  observer.unobserve(entry.target); // stops observing - good for performance
+  // console.log(entries);
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+
+    entry.target.classList.remove('section--hidden');
+    observer.unobserve(entry.target); // stops observing - good for performance
+  });
 };
 
 const sectionObserver = new IntersectionObserver(revealSection, {
@@ -204,21 +206,23 @@ allSections.forEach(function (section) {
 const imgTargets = document.querySelectorAll('img[data-src]'); // selecting images which have data src attribute
 
 const loadImg = function (entries, observer) {
-  const [entry] = entries;
+  // const [entry] = entries;
   // console.log(entry);
 
-  if (!entry.isIntersecting) return;
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
 
-  // Replace src with data-src
+    // Replace src with data-src
 
-  entry.target.src = entry.target.dataset.src;
-  // entry.target.classList.remove('lazy-img'); does not work properly on slow speeds
+    entry.target.src = entry.target.dataset.src;
+    // entry.target.classList.remove('lazy-img'); does not work properly on slow speeds
 
-  entry.target.addEventListener('load', function () {
-    entry.target.classList.remove('lazy-img');
+    entry.target.addEventListener('load', function () {
+      entry.target.classList.remove('lazy-img');
+    });
+
+    observer.unobserve(entry.target);
   });
-
-  observer.unobserve(entry.target);
 };
 
 const imgObserver = new IntersectionObserver(loadImg, {

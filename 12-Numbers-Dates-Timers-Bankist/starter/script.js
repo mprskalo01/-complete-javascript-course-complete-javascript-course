@@ -112,17 +112,26 @@ const formatMovementDate = function (date, locale = 'en-GB') {
 const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
-  const movs = sort
-    ? acc.movements.slice().sort((a, b) => a - b)
-    : acc.movements;
+  const combinedMovsDates = acc.movements.map((mov, i) => ({
+    movement: mov,
+    movementDate: acc.movementsDates.at(i),
+  }));
+  // console.log(combinedMovsDates);
 
-  movs.forEach(function (mov, i) {
-    const type = mov > 0 ? 'deposit' : 'withdrawal';
+  if (sort) combinedMovsDates.sort((a, b) => a.movement - b.movement);
 
-    const date = new Date(acc.movementsDates[i]);
+  // const movs = sort
+  //   ? acc.movements.slice().sort((a, b) => a - b)
+  //   : acc.movements;
+
+  combinedMovsDates.forEach(function (obj, i) {
+    const { movement, movementDate } = obj;
+    const type = movement > 0 ? 'deposit' : 'withdrawal';
+
+    const date = new Date(movementDate);
     const displayDate = formatMovementDate(date, acc.locale);
 
-    // const formattedMov = new Intl.NumberFormat(acc.locale, {
+    // const formattedMovement= new Intl.NumberFormat(acc.locale, {
     //   style: 'currency',
     //   currency: acc.currency,
     // }).format(mov);
@@ -132,7 +141,7 @@ const displayMovements = function (acc, sort = false) {
       i + 1
     } ${type}</div>
      <div class="movements__date">${displayDate}</div>
-        <div class="movements__value">${localizeCurrency(mov)}</div>
+        <div class="movements__value">${localizeCurrency(movement)}</div>
       </div>
     `;
 
@@ -141,24 +150,24 @@ const displayMovements = function (acc, sort = false) {
 };
 
 const calcDisplayBalance = function (acc) {
-  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  acc.balance = acc.movements.reduce((acc, movement) => acc + movement, 0);
 
   labelBalance.textContent = localizeCurrency(acc.balance);
 };
 
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
-    .filter(mov => mov > 0)
-    .reduce((acc, mov) => acc + mov, 0);
+    .filter(movement => movement > 0)
+    .reduce((acc, movement) => acc + movement, 0);
   labelSumIn.textContent = localizeCurrency(incomes);
 
   const out = acc.movements
-    .filter(mov => mov < 0)
-    .reduce((acc, mov) => acc + mov, 0);
+    .filter(movement => movement < 0)
+    .reduce((acc, movement) => acc + movement, 0);
   labelSumOut.textContent = localizeCurrency(Math.abs(out));
 
   const interest = acc.movements
-    .filter(mov => mov > 0)
+    .filter(movement => movement > 0)
     .map(deposit => (deposit * acc.interestRate) / 100)
     .filter((int, i, arr) => {
       // console.log(arr);
@@ -308,7 +317,10 @@ btnLoan.addEventListener('click', function (e) {
 
   const amount = Math.floor(inputLoanAmount.value);
 
-  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+  if (
+    amount > 0 &&
+    currentAccount.movements.some(movement => movement >= amount * 0.1)
+  ) {
     setTimeout(() => {
       // Add movement
       currentAccount.movements.push(amount);

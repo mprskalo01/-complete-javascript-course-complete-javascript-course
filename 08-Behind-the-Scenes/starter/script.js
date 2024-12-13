@@ -205,7 +205,7 @@ friend.age = 27;
 console.log('Friend:', friend);
 console.log('Me:', me);
 */
-
+/*
 let lastName = 'Prskalo';
 let oldLastName = lastName;
 lastName = 'Corleone';
@@ -242,3 +242,4 @@ console.log('After marriage:', jessicaCopy);
 // Object.assign only creates a shallow copy, instead of a deep copy
 // that is why when editing an array (object with reference value) gets changed in both of the objects family arrays
 jessicaCopy.family.push('Mary', 'Joseph');
+*/

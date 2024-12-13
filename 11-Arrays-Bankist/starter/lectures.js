@@ -4,6 +4,51 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 // accounts
 // LECTURES
 
+// Array grouping
+/*
+console.log(movements);
+
+const groupedMovements = Object.groupBy(movements, mov =>
+  mov > 0 ? 'deposits' : 'withdrawals'
+);
+const { deposits, withdrawals } = Object.groupBy(movements, mov =>
+  mov > 0 ? 'deposits' : 'withdrawals'
+);
+
+console.log(groupedMovements); // {'deposits': [...], 'withdrawals': [...]}
+console.log(deposits, withdrawals);
+
+const groupedByActivity = Object.groupBy(accounts, account => {
+  const movementCount = account.movements.length;
+  if (movementCount >= 8) return 'very active';
+  if (movementCount >= 4) return 'active';
+  if (movementCount >= 1) return 'moderate';
+  return 'inactive';
+});
+console.log(groupedByActivity);
+*/
+
+// Non-Destructive Alternatives: toReversed, toSorted, toSpliced, with
+
+console.log(movements);
+
+// const reversedMov = movements.reverse(); // destructive method, mutates the original array
+// const reversedMov = movements.slice().reverse(); // workaround using slice()
+// console.log(reversedMov);
+// console.log(movements);
+
+// NON DESTRUCTIVE METHODS
+const reversedMov = movements.toReversed();
+console.log(reversedMov);
+
+// toSorted (sort), toSpliced (splice)
+
+// movements[1] = 2000; // mutates the original array
+const newMovements = movements.with(1, 2000); // changes the value at the first param which is the index
+console.log(newMovements);
+
+console.log(movements);
+
 // More ways of creating and filling arrays
 /*
 const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -37,6 +82,7 @@ labelBalance.addEventListener('click', () => {
   console.log(movementsUI);
 });
 */
+
 // SORTING ARRAYS - sort MUTATES THE ORIGINAL ARRAY
 /*
 // sorting works by converting to strings and then sorting
@@ -126,8 +172,6 @@ console.log(movements.every(deposit));
 console.log(movements.filter(deposit));
 */
 
-// findIndex method -- returns the index of the first found element
-
 // FIND METHOD -- returns the first element that satisfies this condition
 /*
 const firstWithdrawal = movements.find(mov => mov < 0);
@@ -137,7 +181,32 @@ console.log(accounts);
 
 const account = accounts.find(acc => acc.owner === 'Jessica Davis');
 console.log(account);
+
+// findIndex method -- returns the index of the first found element
+
+const firstWithdrawalIndex = movements.findIndex(mov => mov < 0);
+console.log(firstWithdrawalIndex);
+
+// The New findLast and find LastIndex Methods
+const lastWithdrawal = movements.findLast(mov => mov < 0);
+console.log(lastWithdrawal);
+const lastWithdrawalIndex = movements.findLastIndex(mov => mov < 0);
+console.log(lastWithdrawalIndex);
+
+// 'Your Latest large movement was X movements ago'
+const largestMovement = movements.reduce(function (acc, value) {
+  if (acc > value) return acc;
+  else return value;
+});
+
+const largestMovementIndex = movements.findIndex(
+  mov => mov === largestMovement
+);
+console.log(
+  `Your largest movement of ${largestMovement} was ${largestMovementIndex} movements ago`
+);
 */
+
 /*
 // CHAINING METHODS - chaining methods to methods that returns an array
 const eurToUsd = 1.1;

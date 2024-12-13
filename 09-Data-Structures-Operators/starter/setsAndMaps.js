@@ -177,3 +177,43 @@ console.log(staffUnique);
 console.log(new Set(staff).size);
 
 */
+
+// New Operations to Make Sets Useful
+
+const italianFoods = new Set([
+  'pasta',
+  'gnocchi',
+  'tomatoes',
+  'olive oil',
+  'garlic',
+  'basil',
+]);
+
+const mexicanFoods = new Set([
+  'tortillas',
+  'beans',
+  'rice',
+  'tomatoes',
+  'avocado',
+  'garlic',
+]);
+
+const commonFoods = italianFoods.intersection(mexicanFoods); // foods that are in both Sets
+console.log(`Intersection:`, commonFoods); // tomatoes, garlic
+console.log([...commonFoods]); // converting to array using the spread operator
+
+const italianMexicanFusion = italianFoods.union(mexicanFoods); // combines two sets without duplicates
+console.log(`Union of Italian and Mexican foods:`, italianMexicanFusion);
+// console.log([...new Set([...italianFoods, ...mexicanFoods])]);
+
+const uniqueItalianFoods = italianFoods.difference(mexicanFoods); // return Set of values that are only in the first Set
+console.log('Difference Italian:', uniqueItalianFoods); // returns unique italian foods that are not in mexican foods
+const uniqueMexicanFoods = mexicanFoods.difference(italianFoods);
+console.log('Difference Mexican:', uniqueMexicanFoods); // so both of these remove the shared values, and keep their own
+
+const uniqueItalianAndMexicanFoods =
+  italianFoods.symmetricDifference(mexicanFoods);
+
+console.log(uniqueItalianAndMexicanFoods); // omits the shared values (foods) in this case garlic and tomatoes
+
+console.log(italianFoods.isDisjointFrom(mexicanFoods)); // if the sets have no shared values -- in this case false
