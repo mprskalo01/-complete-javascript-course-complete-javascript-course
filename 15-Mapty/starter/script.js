@@ -14,6 +14,7 @@ class Workout {
   date = new Date();
   // We usually use a library for ids
   id = (Date.now() + '').slice(-10); // last 10 digits of date
+  // clicks = 0;
   constructor(coords, distance, duration) {
     this.coords = coords; // [lat, lng]
     this.distance = distance; // in km
@@ -26,6 +27,9 @@ class Workout {
       months[this.date.getMonth()]
     } ${this.date.getDay()}`;
   }
+  // click() {
+  //   this.clicks++;
+  // }
 }
 
 class Running extends Workout {
@@ -62,16 +66,20 @@ class Cycling extends Workout {
 // APPLICATION ARCHITECTURE
 class App {
   #map;
+  #mapZoomLevel = 13;
   #mapEvent;
   #workouts = [];
   constructor() {
     // immediate execution
     this._getPosition();
 
+    // Get data from local storage
+    this._getLocalStorage();
+
     // Setting event listeners inside of the constructor
     form.addEventListener('submit', this._newWorkout.bind(this));
-
     inputType.addEventListener('change', this._toggleElevationField);
+    containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
   }
   _getPosition() {
     navigator.geolocation.getCurrentPosition(this._loadMap.bind(this), () =>
@@ -86,7 +94,7 @@ class App {
 
     // Displaying a Map Using Leaflet Library
 
-    this.#map = L.map('map').setView(coords, 12);
+    this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
     // console.log(map);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -96,6 +104,10 @@ class App {
 
     // Displaying a Map Marker
     this.#map.on('click', this._showForm.bind(this));
+
+    this.#workouts.forEach(workout => {
+      this._renderWorkoutMarker(workout);
+    });
   }
   _showForm(mapE) {
     this.#mapEvent = mapE;
@@ -172,6 +184,9 @@ class App {
 
     // Hide form + Clear input fields
     this._hideForm();
+
+    // Set local storage to all workouts
+    this._setLocalStorage();
   }
   _renderWorkoutMarker(workout) {
     L.marker(workout.coords)
@@ -236,6 +251,49 @@ class App {
 
     form.insertAdjacentHTML('afterend', html);
   }
+
+  _moveToPopup(e) {
+    const workoutEl = e.target.closest('.workout');
+    if (!workoutEl) return;
+    // console.log(workoutEl);
+    const workout = this.#workouts.find(
+      workout => workout.id === workoutEl.dataset.id
+    );
+    // console.log(workout);
+
+    // Move map to coords
+    this.#map.setView(workout.coords, this.#mapZoomLevel, {
+      animate: true,
+      pan: { duration: 1 },
+    });
+
+    // Using the class Public Interface ( API )
+    // workout.click();
+  }
+
+  // localStorage API
+  _setLocalStorage() {
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+  }
+  _getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('workouts'));
+    // console.log(data);
+
+    if (!data) return;
+
+    this.#workouts = data;
+    this.#workouts.forEach(workout => {
+      this._renderWorkout(workout);
+    });
+  }
+  reset() {
+    localStorage.removeItem('workouts');
+    location.reload();
+  }
 }
 
 const app = new App();
+
+// todo add abilities to edit, delete a workout and to delete all workouts, sort workouts, re-build running and cycling objects cominb from local storage, realistic error messages
+
+// ! TODO ability to position the map to show all workouts and drawing lines and shapes, geocode location from coordinates [after async JS], Display weather for workout time and place
