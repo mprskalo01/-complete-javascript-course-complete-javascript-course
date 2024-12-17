@@ -147,7 +147,7 @@ const country = 'croatia';
 // };
 
 // Consuming promises - Simplified version | Chaining Promises and Handling Rejected Promises
-/*
+
 const getCountryData = function (country) {
   fetch(`https://restcountries.com/v3.1/name/${country}`)
     .then(response => {
@@ -159,10 +159,11 @@ const getCountryData = function (country) {
     })
     .then(data => {
       renderCountry(data[0]);
+      // console.log(data[0])
 
       // Chaining Promises
-      // const neighbour = data[0].borders?.[0];
-      const neighbour = 'sadasdasd';
+      const neighbour = data[0].borders?.[0];
+      // const neighbour = 'sadasdasd';
       if (!neighbour) return;
 
       // the return on this fetch makes the fulfilled value of this promise
@@ -181,13 +182,14 @@ const getCountryData = function (country) {
     });
 };
 
+/*
 btn.addEventListener('click', () => {
   getCountryData('portugal');
 });
 */
 
 // Throwing errors manually
-
+/*
 const getJSON = function (url, errorMsg = 'Something went wrong') {
   return fetch(url).then(response => {
     // Throwing errors manually
@@ -228,7 +230,7 @@ const getCountryData = function (country) {
 btn.addEventListener('click', () => {
   getCountryData('portugal');
 });
-
+*/
 // getCountryData('australia');
 
 ///////////////////////////////////////
@@ -294,4 +296,176 @@ Promise.resolve('Resolved promise 2').then(res => {
 console.log('Test end'); // 2.
 
 ? The first are the synchronous console logs, then promise because of microtasks queue priority and then the setTimeout callback last
+*/
+
+// Building a Simple Promise
+
+/*
+const lotteryPromise = new Promise(function (resolve, reject) {
+  console.log(`Lottery draw is happening 🔮`);
+
+  setTimeout(function () {
+    if (Math.random() >= 0.5) {
+      resolve('You WIN 💰');
+    } else {
+      reject(new Error('You lost your money'));
+    }
+  }, 2000);
+});
+
+lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+
+// Promisifying setTimeout
+const wait = seconds =>
+  new Promise(resolve => setTimeout(resolve, seconds * 1000));
+// no need for reject, timer will never fail
+
+wait(2)
+  .then(() => {
+    console.log('1 second passed');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('2 seconds passed');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('3 seconds passed');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('4 seconds passed');
+    return wait(1);
+  });
+
+// this is nested callback hell - triangle shape - above is avoiding callback hell
+
+setTimeout(() => {
+  console.log('1 second passed');
+  setTimeout(() => {
+    console.log('2 seconds passed');
+    setTimeout(() => {
+      console.log('3 seconds passed');
+      setTimeout(() => {
+        console.log('4 seconds passed');
+      }, 1000);
+    }, 1000);
+  }, 1000);
+}, 1000);
+
+// creating a Promise that is resolved or rejected instantly
+
+Promise.resolve('abc').then(res => console.log(res));
+Promise.reject(new Error('Problem!')).catch(err => console.error(err));
+*/
+
+// Promisifying the Geolocation API
+/*
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    // navigator.geolocation.getCurrentPosition(
+    //   position => resolve(position),
+    //   err => reject(err.message)
+    // );
+
+    // automatically calling those functions
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+const whereAmI = function () {
+  getPosition()
+    .then(pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+      return fetch(
+        `https://geocode.xyz/${lat},${lng}?geoit=json&auth=234603077809374688069x23692`
+      );
+    })
+    .then(res => {
+      if (!res.ok) throw new Error(`Unable to fetch geocoding ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      console.log(`You are in ${data.city}, ${data.country}.`);
+      getCountryData(data.country);
+    })
+    .catch(err =>
+      renderError(`Something went wrong 💥🧨💣 ${err.message}. Try again!`)
+    );
+};
+
+btn.addEventListener('click', whereAmI);
+*/
+
+///////////////////////////////////////
+// Coding Challenge #2
+
+/* 
+Build the image loading functionality that I just showed you on the screen.
+
+Tasks are not super-descriptive this time, so that you can figure out some stuff on your own. Pretend you're working on your own 😉
+
+PART 1
+1. Create a function 'createImage' which receives imgPath as an input. This function returns a promise which creates a new image (use document.createElement('img')) and sets the .src attribute to the provided image path. When the image is done loading, append it to the DOM element with the 'images' class, and resolve the promise. The fulfilled value should be the image element itself. In case there is an error loading the image ('error' event), reject the promise.
+
+If this part is too tricky for you, just watch the first part of the solution.
+
+PART 2
+2. Comsume the promise using .then and also add an error handler;
+3. After the image has loaded, pause execution for 2 seconds using the wait function we created earlier;
+4. After the 2 seconds have passed, hide the current image (set display to 'none'), and load a second image (HINT: Use the image element returned by the createImage promise to hide the current image. You will need a global variable for that 😉);
+5. After the second image has loaded, pause execution for 2 seconds again;
+6. After the 2 seconds have passed, hide the current image.
+
+TEST DATA: Images in the img folder. Test the error handler by passing a wrong image path. Set the network speed to 'Fast 3G' in the dev tools Network tab, otherwise images load too fast.
+
+GOOD LUCK 😀
+*/
+/*
+const imagesContainer = document.querySelector('.images');
+
+const wait = seconds =>
+  new Promise(resolve => setTimeout(resolve, seconds * 1000));
+
+const createImage = function (imgPath) {
+  return new Promise(function (resolve, reject) {
+    const img = document.createElement('img');
+    img.src = imgPath;
+
+    img.addEventListener('load', () => {
+      imagesContainer.insertAdjacentElement('beforeend', img);
+      resolve(img);
+    });
+
+    img.addEventListener('error', () => {
+      reject(new Error('Image not found'));
+    });
+  });
+};
+
+// let currentImg;
+
+createImage('./img/img-1.jpg')
+  .then(() => {
+    console.log(`Image 1 loaded`);
+    return wait(2);
+  })
+  .then(() => {
+    imagesContainer.firstChild.remove();
+    return createImage('./img/img-2.jpg');
+  })
+  .then(() => {
+    console.log(`Image 2 loaded`);
+    return wait(2);
+  })
+  .then(() => {
+    imagesContainer.firstChild.remove();
+    return createImage('./img/img-3.jpg');
+  })
+  .then(() => {
+    console.log(`Image 3 loaded`);
+    return wait(2);
+  })
+  .catch(err => console.error(err));
+
 */
