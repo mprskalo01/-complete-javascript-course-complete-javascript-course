@@ -24,12 +24,55 @@ const renderCountry = function (data, className = '') {
         </article>
   `;
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  // countriesContainer.style.opacity = 1;
+  countriesContainer.style.opacity = 1;
 };
 
 const renderError = function (msg) {
   countriesContainer.insertAdjacentText('beforeend', msg);
-  // countriesContainer.style.opacity = 1;
+  countriesContainer.style.opacity = 1;
+};
+
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v3.1/name/${country}`)
+    .then(response => {
+      // Throwing errors manually
+      if (!response.ok)
+        throw new Error(`Country not found (${response.status})`);
+
+      return response.json();
+    })
+    .then(data => {
+      renderCountry(data[0]);
+      // console.log(data[0])
+
+      // Chaining Promises
+      const neighbour = data[0].borders?.[0];
+      // const neighbour = 'sadasdasd';
+      if (!neighbour) return;
+
+      // the return on this fetch makes the fulfilled value of this promise
+      // we always want to return a promise and handle it using then outside of the callback function
+      return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
+    })
+    .then(response => response.json())
+    .then(data => renderCountry(data[0], 'neighbour'))
+    .catch(err => {
+      console.error(`${err} 💥🧨💣`);
+      renderError(`Something went wrong 💥🧨💣 ${err.message}. Try again!`);
+    })
+    .finally(() => {
+      // finally gets called always - no matter if the promise is sucessful or failed, for example used for loading spinners
+      countriesContainer.style.opacity = 1;
+    });
+};
+
+const getJSON = function (url, errorMsg = 'Something went wrong') {
+  return fetch(url).then(response => {
+    // Throwing errors manually
+    if (!response.ok) throw new Error(`Country not found (${response.status})`);
+
+    return response.json();
+  });
 };
 ///////////////////////////////////////
 // Asynchronous JavaScript, AJAX and APIs
@@ -122,8 +165,6 @@ setTimeout(() => {
 
 // Promises and the Fetch API
 
-const country = 'croatia';
-
 // const request = new XMLHttpRequest();
 // request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
 // request.send();
@@ -147,7 +188,7 @@ const country = 'croatia';
 // };
 
 // Consuming promises - Simplified version | Chaining Promises and Handling Rejected Promises
-
+/*
 const getCountryData = function (country) {
   fetch(`https://restcountries.com/v3.1/name/${country}`)
     .then(response => {
@@ -182,7 +223,6 @@ const getCountryData = function (country) {
     });
 };
 
-/*
 btn.addEventListener('click', () => {
   getCountryData('portugal');
 });
@@ -469,3 +509,160 @@ createImage('./img/img-1.jpg')
   .catch(err => console.error(err));
 
 */
+
+// Consuming Promises with Async / Await
+// and
+// Error Handling With try...catch
+
+/*
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+const whereAmI = async function () {
+  try {
+    // Geolocation
+    const position = await getPosition();
+    const { latitude: lat, longitude: lng } = position.coords;
+
+    // Reverse Geocoding
+    const resGeo = await fetch(
+      `https://geocode.xyz/${lat},${lng}?geoit=json&auth=234603077809374688069x23692`
+    );
+
+    const dataGeo = await resGeo.json();
+
+    // Error for catching
+    // dasdasda  // not defined
+
+    // Country data
+
+    // fetch(`https://restcountries.com/v3.1/name/${country}`).then(res=>console.log(res)
+    // ) this is the old way
+
+    const res = await fetch(
+      `https://restcountries.com/v3.1/name/${dataGeo.country}`
+    ); // this returns a promise ofc
+
+    // Error for catching
+    if (!res.ok) throw new Error('Problem getting country');
+
+    const data = await res.json();
+    renderCountry(data[0]);
+  } catch (error) {
+    console.error(error);
+    renderError(`💥 ${error.message}`);
+  }
+};
+
+whereAmI();
+
+// console.log('FIRST') // this is logged first because it's synchronous code
+
+// Error Handling With try...catch
+
+// try {
+//   let y = 1;
+//   const x = 2;
+//   y = 3;
+// } catch (err) {
+//   alert(err.message);
+// }
+*/
+
+// Returning Values from Async Functions
+/*
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+const whereAmI = async function () {
+  try {
+    const position = await getPosition();
+    const { latitude: lat, longitude: lng } = position.coords;
+
+    const resGeo = await fetch(
+      `https://geocode.xyz/${lat},${lng}?geoit=json&auth=234603077809374688069x23692`
+    );
+
+    const dataGeo = await resGeo.json();
+
+    const res = await fetch(
+      `https://restcountries.com/v3.1/name/${dataGeo.country}`
+    );
+
+    if (!res.ok) throw new Error('Problem getting country');
+    // asdasd;
+    const data = await res.json();
+
+    renderCountry(data[0]);
+    return `You are in ${dataGeo.city}, ${dataGeo.country}`;
+  } catch (error) {
+    console.error(error);
+    renderError(`💥 ${error.message}`);
+
+    // Reject promise returned from async function
+    throw error;
+  }
+};
+
+console.log('1: Will get location');
+
+// const city = whereAmI();
+// console.log(city); // returns a promise
+
+// ? This is how we return values from async/await functions
+// whereAmI()
+//   .then(city => console.log(city))
+//   .catch(error => console.error(`2: ${error.message}`))
+//   .finally(() => console.log('3: Finished getting location'));
+
+// WITHOUT MIXING ASYNC/AWAIT WITH THEN...
+(async () => {
+  try {
+    const city = await whereAmI();
+    console.log(`2: ${city}`);
+  } catch (error) {
+    console.error(`2: ${error.message}`);
+  }
+  console.log('3: Finished getting data');
+})();
+
+// console.log('3: Finished getting location');
+*/
+
+// Running Promises in Parallel
+const get3Countries = async function (country1, country2, country3) {
+  try {
+    // const [data1] = await getJSON(
+    //   `https://restcountries.com/v3.1/name/${country1}`
+    // );
+    // const [data2] = await getJSON(
+    //   `https://restcountries.com/v3.1/name/${country2}`
+    // );
+    // const [data3] = await getJSON(
+    //   `https://restcountries.com/v3.1/name/${country3}`
+    // );
+
+    // console.log([data1.capital, data2.capital, data3.capital]);
+
+    // Combining multiple calls into one promise for efficency - they run at the same time
+    const data = await Promise.all([
+      getJSON(`https://restcountries.com/v3.1/name/${country1}`),
+      getJSON(`https://restcountries.com/v3.1/name/${country2}`),
+      getJSON(`https://restcountries.com/v3.1/name/${country3}`),
+    ]);
+
+    console.log(data.map(data => data[0].capital[0]));
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+get3Countries('portugal', 'switzerland', 'austria');
+
+// Other Promise Combinators: race, allSettled and any
