@@ -13,7 +13,7 @@ import * as ShoppingCart from './shoppingCart.js'; // importing everything as "c
 // console.log(ShoppingCart.totalPrice);
 
 // importing default value
-/*
+
 import add from './shoppingCart.js';
 import { cart } from './shoppingCart.js';
 add('Bread', 5);
@@ -24,7 +24,6 @@ add('apples', 5);
 
 console.log(cart);
 // this proves that modules are a live connection
-*/
 
 // Top-Level await for modules (ES2022) - out of async function
 
@@ -108,8 +107,11 @@ console.log(ShoppingCart2.totalPrice);
 // ? A Brief Introduction to the Command Line
 
 // ? Introduction to NPM
-/*
-import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+
+// import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+// import cloneDeep from 'lodash'; // will install new packages
+import cloneDeep from 'lodash-es';
+
 const state = {
   cart: [
     { product: 'bread', quantity: 5 },
@@ -125,7 +127,38 @@ state.user.loggedIn = false;
 
 console.log(stateClone); // this is changed when original array changed
 
-console.log(stateDeepClone); // not changed
-*/
+// console.log(stateDeepClone); // not changed
 
 // Bundling with Parcel and NPM Scripts
+
+// also runnin scripts from package.json
+
+if (module.hot) {
+  module.hot.accept();
+}
+
+// Configuring Babel and polyfilling
+
+class Person {
+  #greeting = 'hey';
+  constructor(name) {
+    this.name = name;
+    console.log(`${this.#greeting}, ${this.name}`);
+  }
+}
+
+const mario = new Person('Mario');
+console.log('Mario' ?? null);
+
+console.log(cart.find(el => el.quantity >= 4));
+Promise.resolve('TEST').then(x => console.log(x));
+
+// Possible to only import methods that we use for reducing bundle size
+
+import 'core-js';
+// import 'core-js/core/array/find';
+
+// Polifilling async functions
+import 'regenerator-runtime/runtime';
+
+// Review: Writing Clean and Modern JavaScript
