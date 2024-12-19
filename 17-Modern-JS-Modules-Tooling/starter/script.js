@@ -57,3 +57,75 @@ console.log(lastPost); // Promise pending
 const lastPost2 = await getLastPost(); // waits for the promise to resolve
 console.log(lastPost2); // returns the correct value
 */
+
+// The module pattern
+/*
+const ShoppingCart2 = (function () {
+  const cart = [];
+  const shippingCost = 10;
+  const totalPrice = 237;
+  const totalQuantity = 23;
+  const addToCart = function (product, quantity) {
+    cart.push({ product, quantity });
+    console.log(
+      `${quantity} ${product} added to cart (shipping cost is ${shippingCost})`
+    );
+  };
+  const orderStock = function (product, quantity) {
+    cart.push({ product, quantity });
+    console.log(`${quantity} ${product} ordered from supplier`);
+  };
+
+  // returning a public API
+  return {
+    addToCart,
+    cart,
+    totalPrice,
+    totalQuantity,
+  };
+})();
+
+ShoppingCart2.addToCart('apple', 4);
+ShoppingCart2.addToCart('pizza', 2);
+console.log(ShoppingCart2);
+console.log(ShoppingCart2.totalPrice);
+*/
+
+// CommonJS Modules - old way of exporting and importing modules in Node.js
+
+// Export
+
+// export.addToCart = function (product, quantity) {
+//   cart.push({ product, quantity });
+//   console.log(
+//     `${quantity} ${product} added to cart (shipping cost is ${shippingCost})`
+//   );
+// };
+
+// Import
+// const {addToCart} = require('./shoppingCart.js')
+
+// ? A Brief Introduction to the Command Line
+
+// ? Introduction to NPM
+/*
+import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+const state = {
+  cart: [
+    { product: 'bread', quantity: 5 },
+    { product: 'pizza', quantity: 2 },
+  ],
+  user: { loggedIn: true },
+};
+
+const stateClone = Object.assign({}, state);
+const stateDeepClone = cloneDeep(state);
+
+state.user.loggedIn = false;
+
+console.log(stateClone); // this is changed when original array changed
+
+console.log(stateDeepClone); // not changed
+*/
+
+// Bundling with Parcel and NPM Scripts

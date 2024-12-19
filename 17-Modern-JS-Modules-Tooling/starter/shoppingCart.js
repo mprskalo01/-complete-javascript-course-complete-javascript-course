@@ -10,6 +10,7 @@ console.log('Finish fetching users');
 
 // we have to export variables, otherwise they are scoped to this module only
 // named exports
+/*
 const shippingCost = 10;
 const cart = [];
 
@@ -29,3 +30,4 @@ export default function (product, quantity) {
   cart.push({ product, quantity });
   console.log(`${quantity} ${product} added to cart`);
 }
+*/
